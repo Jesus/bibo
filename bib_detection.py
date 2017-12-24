@@ -2,9 +2,6 @@ from PIL import Image
 import numpy as np
 import tensorflow as tf
 
-from object_detection.utils import dataset_util
-from object_detection.utils import label_map_util
-
 graph_path  = 'data/object_detection/bib_detection_frozen_inference_graph.pb'
 labels_path = 'data/object_detection/label_map.pbtxt'
 
@@ -18,10 +15,6 @@ def load_detection_graph():
             tf.import_graph_def(od_graph_def, name='')
 
     return detection_graph
-
-label_map = label_map_util.load_labelmap(labels_path)
-categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=1, use_display_name=True)
-category_index = label_map_util.create_category_index(categories)
 
 def load_image_into_numpy_array(image):
     # Unfortunately, we can't use OpenCV to load the image directly into a
