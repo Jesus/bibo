@@ -103,3 +103,10 @@ ENV/
 # Protobuf files
 *.pb
 *.pbtxt
+
+# Temporary files
+tmp/*
+
+# Images
+*.png
+*.jpg
