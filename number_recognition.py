@@ -49,8 +49,9 @@ def chars_as_number(chars):
 
     return number
 
-def detect_numbers(image, bibs):
+def detect_numbers(image_path, bibs):
     graph = load_graph()
+    image = cv2.imread(image_path)
     images_data = load_bibs(image, bibs)
 
     images_placeholder = graph.get_tensor_by_name('images_placeholder:0')
