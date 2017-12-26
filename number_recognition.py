@@ -13,10 +13,10 @@ def load_bibs(image, bibs):
             dtype='float32')
 
     for i, bib_coordinates in enumerate(bibs):
-        ymin = bib_coordinates["top"]
-        ymax = bib_coordinates["bottom"]
-        xmin = bib_coordinates["left"]
-        xmax = bib_coordinates["right"]
+        ymin = bib_coordinates["ymin"]
+        ymax = bib_coordinates["ymax"]
+        xmin = bib_coordinates["xmin"]
+        xmax = bib_coordinates["xmax"]
 
         bib = image[ymin:ymax, xmin:xmax]
         bib = cv2.resize(bib, (width, height)) / 255.0
@@ -65,6 +65,9 @@ def detect_numbers(image_path, bibs):
 
     numbers = []
     for i in range(len(bibs)):
-        numbers.append(chars_as_number(chars[i]))
+        numbers.append({
+                "chars_logits": chars_logits,
+                "chars": chars,
+                "text": chars_as_number(chars[i])})
 
     return numbers

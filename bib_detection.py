@@ -26,7 +26,25 @@ def load_image_into_numpy_array(image):
     (im_width, im_height) = image.size
     return np.array(image.getdata()).reshape((im_height, im_width, 3)).astype(np.uint8)
 
-def detect_bibs(image_path):
+def load_images(image_paths):
+    batch_size = len(image_paths)
+    dimensions = []
+    width, height = 1600, 1067
+    images_data = np.ndarray(shape=(batch_size, height, width, 3),
+            dtype='float32')
+
+    for i, image_path in enumerate(image_paths):
+        pil_image = Image.open(image_path)
+        width, height = pil_image.size
+
+        # TODO: Resize to average dimensions
+
+        images_data[i, ...] = load_image_into_numpy_array(pil_image)
+        dimensions.append([width, height])
+
+    return images_data, dimensions
+
+def detect_bibs(image_paths):
     """
     Returns a list of images as np arrays, one per each bib found.
     """
@@ -45,28 +63,24 @@ def detect_bibs(image_path):
         detection_classes = detection_graph.get_tensor_by_name('detection_classes:0')
         num_detections = detection_graph.get_tensor_by_name('num_detections:0')
 
-        pil_image = Image.open(image_path)
-        w, h = pil_image.size
-        image_np = load_image_into_numpy_array(pil_image)
+        images_data, dimensions = load_images(image_paths)
+        boxes, scores, classes, num = sess.run([detection_boxes, detection_scores, detection_classes, num_detections], feed_dict={image_tensor: images_data})
 
-        # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
-        image_np_expanded = np.expand_dims(image_np, axis=0)
-        (boxes, scores, classes, num) = sess.run([detection_boxes, detection_scores, detection_classes, num_detections], feed_dict={image_tensor: image_np_expanded})
+        for i in range(len(images_data)):
+            image_bibs = []
+            for j in range(int(num[i])):
+                if scores[i][j] < 0.1: continue
+                score = int(scores[i][j] * 1000)
 
-        boxes, scores, classes, num = map(np.squeeze, [boxes, scores, classes, num])
+                ymin, xmin, ymax, xmax = boxes[i][j]
 
-        for i in range(int(num)):
-            if scores[i] < 0.1: continue
-            score = int(scores[i] * 1000)
-
-            ymin, xmin, ymax, xmax = boxes[i]
-
-            bibs.append({
-                "top":      int(round(ymin * h)),
-                "left":     int(round(xmin * w)),
-                "right":    int(round(xmax * w)),
-                "bottom":   int(round(ymax * h)),
-                "score":    scores[i]
-            })
+                image_bibs.append({
+                    "ymin": int(round(ymin * dimensions[i][1])),
+                    "xmin": int(round(xmin * dimensions[i][0])),
+                    "xmax": int(round(xmax * dimensions[i][0])),
+                    "ymax": int(round(ymax * dimensions[i][1])),
+                    "score": scores[i][j]
+                })
+            bibs.append(image_bibs)
 
     return bibs
