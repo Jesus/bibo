@@ -29,18 +29,16 @@ def load_image_into_numpy_array(image):
 def load_images(image_paths):
     batch_size = len(image_paths)
     dimensions = []
-    width, height = 1600, 1067
+    width, height = 1200, 800
+
     images_data = np.ndarray(shape=(batch_size, height, width, 3),
             dtype='float32')
-
     for i, image_path in enumerate(image_paths):
         pil_image = Image.open(image_path)
-        width, height = pil_image.size
+        dimensions.append(pil_image.size)
 
-        # TODO: Resize to average dimensions
-
+        pil_image = pil_image.resize((width, height), Image.ANTIALIAS)
         images_data[i, ...] = load_image_into_numpy_array(pil_image)
-        dimensions.append([width, height])
 
     return images_data, dimensions
 
