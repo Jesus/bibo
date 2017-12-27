@@ -29,7 +29,7 @@ def load_image_into_numpy_array(image):
 def load_images(image_paths):
     batch_size = len(image_paths)
     dimensions = []
-    width, height = 1200, 800
+    width, height = 900, 600
 
     images_data = np.ndarray(shape=(batch_size, height, width, 3),
             dtype='float32')
