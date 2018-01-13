@@ -50,7 +50,7 @@ class Adapter:
                     WHERE id IN (
                         SELECT id FROM photos
                             WHERE bib_processing_url IS NOT NULL
-                              AND bib_processing_at IS NULL
+                              AND (bib_processing_at IS NULL OR bib_processing_at <= now() - INTERVAL '15 minutes')
                               AND bib_processed_at IS NULL
                               ORDER BY id ASC
                               LIMIT %d
