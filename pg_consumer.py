@@ -14,15 +14,7 @@ while True:
         time.sleep(5)
     else:
         results = run_inference_on_batch(images)
-
-        # for idx, path in enumerate(images):
-        #     print("IMAGE %04d:" % idx)
-        #     for bib in results[idx]:
-        #         print(f"  {bib['number']['text']}")
-        #     print("")
-
-        # adapter.persist_results(results)
+        adapter.persist_results(results)
         adapter.release_batch()
-
 
 adapter.close()

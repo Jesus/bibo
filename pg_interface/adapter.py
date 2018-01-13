@@ -8,6 +8,8 @@ from shutil import rmtree
 
 import psycopg2
 
+from pg_interface.result import Result
+
 class Adapter:
     def __init__(self, batch_size):
         self.batch_size = batch_size
@@ -89,9 +91,9 @@ class Adapter:
             self.local_paths.append(file_path)
 
     def persist_results(self, results):
-        for _result in results:
-            result = Result(result)
-            result.persist(self.connection) # wip
+        for i, inference_result in enumerate(results):
+            photo_id, photo_url = self.batch_images[i]
+            Result(inference_result).persist(self.connection, photo_id)
 
     def release_batch(self):
         """Releases the lock for our batch of images"""
