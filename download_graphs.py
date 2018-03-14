@@ -9,6 +9,6 @@ files = {
 }
 
 for url, path in files.items():
-    url = f"{url_prefix}{url}"
+    url = "%s%s" % (url_prefix, url)
     print(url)
     urllib.request.urlretrieve(url, path)
