@@ -25,12 +25,12 @@ class Adapter:
         self.connection = psycopg2.connect("dbname=bibo-web-dev")
 
     def _reset_batch_data(self):
-        self.batch_images = None
-        self.local_paths = None
+        self.batch_images = []
+        self.local_paths = []
 
     def fetch_batch(self):
         # Make sure we don't hold any images already before fetching more...
-        if self.batch_images != None:
+        if self.batch_images != []:
             raise RuntimeError("Previously fetched batch hasn't been released")
 
         self._lock_batch()
@@ -75,7 +75,7 @@ class Adapter:
 
     def _download_batch(self):
         # Make sure we don't have any images already before downloading more...
-        if self.local_paths != None:
+        if self.local_paths != []:
             raise RuntimeError("Previously fetched batch hasn't been released")
 
         self.tmp_path = tempfile.mkdtemp()
