@@ -110,3 +110,6 @@ tmp/*
 # Images
 *.png
 *.jpg
+
+# OS X files
+.DS_Store
