@@ -45,7 +45,7 @@ def chars_as_number(chars):
     for char in chars:
         if char == 10:
             break
-        number = f"{number}{char}"
+        number = "%s%i" % (number, char)
 
     return number
 

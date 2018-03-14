@@ -13,7 +13,7 @@ while True:
     if len(images) == 0:
         time.sleep(5)
     else:
-        print(f"Processing {len(images)} images...")
+        print("Processing %i images..." % len(images))
         results = run_inference_on_batch(images)
         adapter.persist_results(results)
         adapter.release_batch()
