@@ -22,7 +22,13 @@ class Adapter:
         self._reset_batch_data()
 
     def __init_connection(self):
-        self.connection = psycopg2.connect("dbname=bibo-web-dev")
+        if 'DBHOST' in os.environ:
+            self.connection = psycopg2.connect(host=os.environ['DBHOST'],
+                                               dbname=os.environ['DBNAME'],
+                                               user=os.environ['DBUSER'],
+                                               password=os.environ['DBPASS'])
+        else:
+            self.connection = psycopg2.connect("dbname=bibo-web-dev")
 
     def _reset_batch_data(self):
         self.batch_images = []
