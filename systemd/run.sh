@@ -10,3 +10,6 @@ export PYTHONPATH=/home/ubuntu/workspace/models/slim:$PYTHONPATH
 export PYTHONPATH=/home/ubuntu/workspace/models/object_detection/protos:$PYTHONPATH
 
 . "$BIBO_PATH/systemd/database.sh"
+
+cd $BIBO_PATH
+/usr/bin/python3 pg_consumer.py
