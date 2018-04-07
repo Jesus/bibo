@@ -3,7 +3,7 @@ import time
 from pg_interface.adapter import Adapter
 from inference import run_inference_on_batch
 
-batch_size = 2
+batch_size = 1
 
 adapter = Adapter(batch_size)
 
