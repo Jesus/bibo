@@ -1,0 +1,21 @@
+# This file should be placed at /lib/systemd/system, then it can be enabled
+# as a system service (as root):
+#
+# systemctl daemon-reload
+# systemctl enable bibo_processor.service
+#
+# To check its status:
+#
+# systemctl status bibo_processor.service
+
+[Unit]
+Description=Bibo image processor
+After=multi-user.target
+
+[Service]
+Type=idle
+User=ubuntu
+ExecStart=/usr/bin/python3 /home/ubuntu/workspace/bibo/pg_consumer.py
+
+[Install]
+WantedBy=multi-user.target
