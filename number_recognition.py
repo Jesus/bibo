@@ -66,8 +66,8 @@ def detect_numbers(image_path, bibs):
     numbers = []
     for i in range(len(bibs)):
         numbers.append({
-                "chars_logits": chars_logits,
-                "chars": chars,
+                "chars_logits": chars_logits[i],
+                "chars": chars[i],
                 "text": chars_as_number(chars[i])})
 
     return numbers
