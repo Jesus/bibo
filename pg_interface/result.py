@@ -7,6 +7,7 @@ import urllib.request
 from shutil import rmtree
 
 import psycopg2
+import json
 
 class Result:
     def __init__(self, data):
@@ -23,17 +24,21 @@ class Result:
                 """ % (photo_id))
 
         for bib in self.result_data:
-            # TODO: Fill `details` column with the raw inference data
+            details = {
+                "coordinates_score": bib['coordinates']['score'].item(),
+                "number_logits": bib['number']['scores'].tolist()
+            }
             cursor.execute("""
-                INSERT INTO bibs (photo_id, x0, y0, x1, y1, number)
-                    VALUES (%i, %i, %i, %i, %i, '%s')
+                INSERT INTO bibs (photo_id, x0, y0, x1, y1, number, details)
+                    VALUES (%i, %i, %i, %i, %i, '%s', '%s')
                 """ % (
                     photo_id,
                     bib['coordinates']['xmin'],
                     bib['coordinates']['ymin'],
                     bib['coordinates']['xmax'],
                     bib['coordinates']['ymax'],
-                    bib['number']['text']
+                    bib['number']['text'],
+                    json.dumps(details)
                 ))
 
         connection.commit()
