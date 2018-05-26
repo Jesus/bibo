@@ -16,14 +16,8 @@ from number_recognition import detect_numbers
 #         "scores": []
 #     }
 # }, ...]
-def run_inference(image_path):
+def bibs_data(coordinates, numbers):
     bibs = []
-
-    # Bib detection
-    coordinates = detect_bibs(image_path)
-
-    # Number recognition
-    numbers = detect_numbers(image_path, coordinates)
 
     for i in range(len(coordinates)):
         bibs.append({
@@ -33,6 +27,15 @@ def run_inference(image_path):
                 "scores": numbers[i]["chars_logits"]}})
 
     return bibs
+
+def run_inference(image_path):
+    # Bib detection
+    coordinates = detect_bibs(image_path)
+
+    # Number recognition
+    numbers = detect_numbers(image_path, coordinates)
+
+    return bibs_data(coordinates, numbers)
 
 def run_inference_on_batch(image_paths):
     processed_images = []
@@ -47,14 +50,6 @@ def run_inference_on_batch(image_paths):
         # Number recognition
         numbers = detect_numbers(image_path, coordinates)
 
-        bibs = []
-        for i in range(len(coordinates)):
-            bibs.append({
-                "coordinates": coordinates[i],
-                "number": {
-                    "text": numbers[i]["text"],
-                    "scores": numbers[i]["chars_logits"]}})
-
-        processed_images.append(bibs)
+        processed_images.append(bibs_data(coordinates, numbers))
 
     return processed_images
