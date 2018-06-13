@@ -18,6 +18,9 @@ def load_bibs(image, bibs):
         xmin = bib_coordinates["xmin"]
         xmax = bib_coordinates["xmax"]
 
+        if xmin == xmax or ymin == ymax:
+            continue
+
         bib = image[ymin:ymax, xmin:xmax]
         bib = cv2.resize(bib, (width, height)) / 255.0
 
