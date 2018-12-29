@@ -6,7 +6,7 @@ import tensorflow as tf
 # Model config
 graph_path = "data/attention_ocr/number_recognition_frozen_inference_graph.pb"
 batch_size = 32
-width, height = 80, 80
+width, height = 120, 120
 
 def load_bibs(image, bibs):
     images_data = np.ndarray(shape=(batch_size, width, height, 3),
